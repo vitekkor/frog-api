@@ -1,0 +1,10 @@
+server:
+  port: ${port:8080}
+
+spring:
+  application:
+    name: frog-api
+
+logging:
+  file:
+    name: ${log.dir:/tmp}/frog-api.main.log
