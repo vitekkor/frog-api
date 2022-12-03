@@ -62,8 +62,4 @@ class ApiController(
         return ResponseEntity.ok(newToken.token)
     }
 
-    companion object {
-        private const val frogsImages = "images"
-    }
-
 }
