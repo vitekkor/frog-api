@@ -4,6 +4,34 @@ server:
 spring:
   application:
     name: frog-api
+  # Database
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog.xml
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/frogapi?reWriteBatchedInserts=true
+    username: postgres
+    password: test
+    max-active: 50
+    hikari:
+      maximum-pool-size: 50
+      connectionTimeout: 40000
+      idleTimeout: 600000
+      maxLifetime: 1800000
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+        generate_ddl: false
+        ddl_auto: none
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        generate_statistics: true
+        order_inserts: true
+        order_updates: true
+        flush-mode: manual
+        jdbc:
+          batch_size: 500
 
 logging:
   file:

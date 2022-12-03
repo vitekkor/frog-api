@@ -21,6 +21,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework:spring-jdbc")
     implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutinesVersion}")
@@ -29,6 +31,8 @@ dependencies {
 
     runtimeOnly("org.jetbrains.kotlin:kotlin-reflect:1.7.21")
 
+    implementation ("org.postgresql:postgresql:42.2.27")
+    runtimeOnly("org.postgresql:postgresql")
 
     testImplementation(kotlin("test"))
     testImplementation("org.springframework.boot:spring-boot-starter-test")
