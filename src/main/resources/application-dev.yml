@@ -10,9 +10,9 @@ spring:
     change-log: classpath:db/changelog.xml
   datasource:
     driver-class-name: org.postgresql.Driver
-    url:
-    username:
-    password:
+    url: jdbc:postgresql://localhost:5432/frogapi?reWriteBatchedInserts=true
+    username: postgres
+    password: test
     max-active: 50
     hikari:
       maximum-pool-size: 50
@@ -33,11 +33,11 @@ spring:
           batch_size: 500
 
 minio:
-  endpoint:
-  accessKey:
-  secretKey:
-  bucket:
-  autoCreation:
+  endpoint: http://localhost:9000/
+  accessKey: frogapi
+  secretKey: grogApiPassword
+  bucket: frogapi
+  autoCreation: false
 
 logging:
   file:
