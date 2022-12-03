@@ -12,7 +12,9 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType.IMAGE_JPEG_VALUE
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.util.Calendar
 import javax.servlet.http.HttpServletResponse
+
 
 @RestController
 @RequestMapping("/api/v1")
@@ -35,7 +37,13 @@ class ApiController(
         }
         tokenFromDB.requests++
         tokenService.saveToken(tokenFromDB)
-        val frog = s3Service.getRandomFrogImage()
+        val calendar = Calendar.getInstance()
+        val day = calendar[Calendar.DAY_OF_WEEK]
+        val frog = if (day == Calendar.WEDNESDAY) {
+            s3Service.getRandomIWMDImage()
+        } else {
+            s3Service.getRandomFrogImage()
+        }
         logger.info("Return frog image ${frog.name} for request with token $token")
         httpServletResponse.outputStream.use { output ->
             frog.inputStream().use { input ->
