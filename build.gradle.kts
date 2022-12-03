@@ -34,6 +34,8 @@ dependencies {
     implementation ("org.postgresql:postgresql:42.2.27")
     runtimeOnly("org.postgresql:postgresql")
 
+    implementation("io.minio:minio:8.4.6")
+
     testImplementation(kotlin("test"))
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.projectreactor:reactor-test")
