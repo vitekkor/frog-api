@@ -34,6 +34,10 @@ class TokenService(private val tokenRepository: TokenRepository) {
         }
     }
 
+    suspend fun getToken(tokenString: String): Token? = withContext(Dispatchers.IO) {
+        return@withContext tokenRepository.findByToken(tokenString)
+    }
+
     companion object {
         private const val upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
