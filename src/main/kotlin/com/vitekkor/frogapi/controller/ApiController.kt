@@ -23,6 +23,9 @@ class ApiController(private val userRepository: UserRepository, private val toke
     @GetMapping("/{token}/frog", produces = [IMAGE_JPEG_VALUE])
     suspend fun getFrog(@PathVariable token: String): ResponseEntity<Resource?> = withContext(Dispatchers.IO) {
         logger.info("Incoming frog request with token $token")
+        val tokenFromDB = tokenService.getToken(token) ?: return@withContext ResponseEntity.badRequest().build()
+        tokenFromDB.requests++
+        tokenService.saveToken(tokenFromDB)
         val frog = File(frogsImages).listFiles()?.random()
         if (frog != null) {
             logger.info("Return frog image ${frog.path} for request with token $token")
