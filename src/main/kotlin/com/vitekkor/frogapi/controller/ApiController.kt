@@ -1,40 +1,48 @@
 package com.vitekkor.frogapi.controller
 
 import com.vitekkor.frogapi.db.repository.UserRepository
+import com.vitekkor.frogapi.service.S3Service
 import com.vitekkor.frogapi.service.TokenService
 import com.vitekkor.frogapi.util.decodeBase64
 import com.vitekkor.frogapi.util.encodeBase64
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import mu.KotlinLogging.logger
-import org.springframework.core.io.FileSystemResource
-import org.springframework.core.io.Resource
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType.IMAGE_JPEG_VALUE
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import java.io.File
+import javax.servlet.http.HttpServletResponse
 
 @RestController
 @RequestMapping("/api/v1")
-class ApiController(private val userRepository: UserRepository, private val tokenService: TokenService) {
+class ApiController(
+    private val userRepository: UserRepository,
+    private val tokenService: TokenService,
+    private val s3Service: S3Service
+) {
     private val logger = logger {}
 
     @GetMapping("/{token}/frog", produces = [IMAGE_JPEG_VALUE])
-    suspend fun getFrog(@PathVariable token: String): ResponseEntity<Resource?> = withContext(Dispatchers.IO) {
+    suspend fun getFrog(
+        @PathVariable token: String,
+        httpServletResponse: HttpServletResponse
+    ) = withContext(Dispatchers.IO) {
         logger.info("Incoming frog request with token $token")
-        val tokenFromDB = tokenService.getToken(token) ?: return@withContext ResponseEntity.badRequest().build()
+        val tokenFromDB = tokenService.getToken(token) ?: kotlin.run {
+            httpServletResponse.status = 403
+            return@withContext
+        }
         tokenFromDB.requests++
         tokenService.saveToken(tokenFromDB)
-        val frog = File(frogsImages).listFiles()?.random()
-        if (frog != null) {
-            logger.info("Return frog image ${frog.path} for request with token $token")
-            return@withContext frog.let {
-                ResponseEntity.ok(FileSystemResource(it.absolutePath))
+        val frog = s3Service.getRandomFrogImage()
+        logger.info("Return frog image ${frog.name} for request with token $token")
+        httpServletResponse.outputStream.use { output ->
+            frog.inputStream().use { input ->
+                input.copyTo(output)
             }
         }
-        logger.warn("Frog image not found!")
-        return@withContext ResponseEntity.internalServerError().build()
+        frog.delete()
     }
 
     @GetMapping("/generateToken")
