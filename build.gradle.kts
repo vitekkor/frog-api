@@ -34,6 +34,8 @@ dependencies {
     implementation ("org.postgresql:postgresql:42.2.27")
     runtimeOnly("org.postgresql:postgresql")
 
+    implementation("org.liquibase:liquibase-core")
+
     implementation("io.minio:minio:8.4.6")
 
     testImplementation(kotlin("test"))
