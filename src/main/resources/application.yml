@@ -37,7 +37,7 @@ minio:
   accessKey:
   secretKey:
   bucket:
-  autoCreation:
+  autoCreation: true
 
 logging:
   file:
