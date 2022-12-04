@@ -10,16 +10,6 @@ import org.springframework.boot.runApplication
 @SpringBootApplication
 class FrogApiApplication
 
-object Dev {
-    @JvmStatic
-    fun main(args: Array<String>) {
-        System.setProperty("spring.profiles.active", "dev")
-        System.setProperty("log.dir", "frog-api/logs")
-
-        com.vitekkor.frogapi.main(args)
-    }
-}
-
 fun main(args: Array<String>) {
     runApplication<FrogApiApplication>(*args)
 }
