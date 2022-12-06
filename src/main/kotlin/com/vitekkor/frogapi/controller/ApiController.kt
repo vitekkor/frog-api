@@ -32,7 +32,7 @@ class ApiController(
     ) = withContext(Dispatchers.IO) {
         logger.info("Incoming frog request with token $token")
         val tokenFromDB = tokenService.getToken(token) ?: kotlin.run {
-            httpServletResponse.status = 403
+            httpServletResponse.status = 401
             return@withContext
         }
         tokenFromDB.requests++
@@ -60,7 +60,7 @@ class ApiController(
             userRepository.findOneByEmail(email)
         }
         if (user == null || user.password != password.encodeBase64()) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build()
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
         }
         val newToken = tokenService.generateToken(user)
         tokenService.saveToken(newToken)
