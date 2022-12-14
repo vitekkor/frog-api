@@ -1,0 +1,6 @@
+minio:
+  endpoint: http://test:9000/
+  accessKey: frogapi
+  secretKey: test
+  bucket: frogapi
+  autoCreation: false
