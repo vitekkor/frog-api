@@ -1,3 +1,5 @@
+[![CI](https://github.com/vitekkor/frog-api/actions/workflows/main.yaml/badge.svg?branch=master)](https://github.com/vitekkor/frog-api/actions/workflows/main.yaml)
+
 # API for frog and toad images
 
 ### It's wednesday my dudes!
@@ -32,6 +34,7 @@ You have to provide configuration for postgres database and S3 storage:
 
 ```yaml
 spring:
+  datasource:
     url:
     username:
     password:
