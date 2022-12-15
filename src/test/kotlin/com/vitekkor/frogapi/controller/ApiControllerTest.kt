@@ -72,7 +72,6 @@ class ApiControllerTest {
             doReturn(Token()).`when`(tokenService).getToken("token")
             doReturn(frogImage).`when`(s3Service).getRandomFrogImage()
             PowerMockito.mockStatic(Calendar::class.java)
-            mockStatic(Calendar::class.java)
             `when`(Calendar.getInstance()).thenReturn(notWednesdayCalendar)
 
             val result = mockMvc.perform(get("/api/v1/token/frog"))
