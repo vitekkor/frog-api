@@ -50,12 +50,14 @@ class ApiController(
                 input.copyTo(output)
             }
         }
+        httpServletResponse.contentType = IMAGE_JPEG_VALUE
         frog.delete()
     }
 
     @GetMapping("/generateToken")
-    suspend fun generateToken(@RequestHeader("Authorization") authorization: String): ResponseEntity<String> {
-        val (email, password) = authorization.replace("Basic ", "").decodeBase64().split(":")
+    suspend fun generateToken(@RequestHeader("Authorization") authorization: String?): ResponseEntity<String> {
+        val (email, password) = authorization?.replace("Basic ", "")?.decodeBase64()?.split(":")
+            ?: return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
         val user = withContext(Dispatchers.IO) {
             userRepository.findOneByEmail(email)
         }
