@@ -19,8 +19,7 @@ jobs:
           distribution: corretto
           java-version: 11
 
-      - name: Setup Gradle
+      - name: Setup Gradle and test
         uses: gradle/gradle-build-action@v2
-
-      - name: Build and test
-        run: ./gradlew build
+        with:
+          arguments: test
